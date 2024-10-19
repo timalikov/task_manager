@@ -5,11 +5,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { Task } from '../task';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-task',
   standalone: true,
-  imports: [MatButtonModule, MatCardModule, MatInputModule, MatFormFieldModule, FormsModule],
+  imports: [MatButtonModule, MatCardModule, MatInputModule, MatFormFieldModule, FormsModule, CommonModule],
   templateUrl: './add-task.component.html',
   styleUrl: './add-task.component.css'
 })

@@ -1,14 +1,12 @@
-<br>
-@for(task of tasks; track task.id) {
-    <mat-card >
-        <mat-card-header>
-            <mat-card-title>{{task.title}}</mat-card-title>
-            <mat-card-subtitle>{{task.description}}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-actions>
-            <button mat-button [routerLink]="['/edit-task', task.id]">EDIT TASK</button>
-            <button mat-button (click)="removeTask(task.id)">MARK AS DONE</button>
-        </mat-card-actions>
-    </mat-card>
-    <br>
-}
+<mat-card *ngFor="let task of tasks; trackBy: trackById">
+    <mat-card-header>
+      <mat-card-title>{{ task.title }}</mat-card-title>
+      <mat-card-subtitle>{{ task.description }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-actions>
+      <button mat-button [routerLink]="['/edit-task', task.id]">EDIT TASK</button>
+      <button mat-button (click)="removeTask(task.id)">MARK AS DONE</button>
+    </mat-card-actions>
+  </mat-card>
+  <br>
+  

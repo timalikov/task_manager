@@ -3,11 +3,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
 import { Task } from '../task';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [MatButtonModule, MatCardModule, RouterLink],
+  imports: [MatButtonModule, MatCardModule, RouterLink, CommonModule],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })
@@ -23,5 +24,9 @@ export class TaskListComponent {
 
     localStorage.setItem('tasks', JSON.stringify(this.tasks));
 
+  }
+
+  trackById(index: number, task: Task): number {
+    return task.id;
   }
 }

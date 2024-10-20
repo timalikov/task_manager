@@ -3,27 +3,56 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
 import { Task } from '../task';
+import { TaskService } from '../task.service';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [MatButtonModule, MatCardModule, RouterLink, CommonModule],
+  imports: [MatButtonModule, MatCardModule, RouterLink, CommonModule, HttpClientModule],
+  providers: [TaskService],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })
 export class TaskListComponent {
-  tasks: Task[] = JSON.parse(localStorage.getItem('tasks')!);
+  tasks: Task[] = [];
+  totalTasks: number = 0;
+  totalPages: number = 0;
+  currentPage: number = 1;
+  pageSize: number = 10;
 
-  removeTask(id: number) {
-    let taskIndex = this.tasks.findIndex(task => task.id === id);
+  constructor(private taskService: TaskService) {}
 
-    if (taskIndex !== -1) {
-      this.tasks.splice(taskIndex, 1);
-    }
+  ngOnInit(): void {
+    this.loadTasks();
+  }
 
-    localStorage.setItem('tasks', JSON.stringify(this.tasks));
-
+  loadTasks(): void {
+    this.taskService.getTasks(this.currentPage, this.pageSize).subscribe({
+      next: (response) => {
+        console.log('Response:', response); // Log the response to check if data is being returned
+        this.tasks = response.data;
+        this.totalTasks = response.totalTasks;
+        this.totalPages = response.totalPages;
+      },
+      error: (error) => {
+        console.error('Error fetching tasks:', error);
+      }
+    });
+  }  
+  
+  removeTask(id: number): void {
+    this.taskService.deleteTask(id).subscribe({
+      next: () => {
+        console.log(`Task with id ${id} deleted successfully.`);
+        // Remove the task from the tasks array in the frontend
+        this.tasks = this.tasks.filter(task => task.id !== id);
+      },
+      error: (error) => {
+        console.error('Error deleting task:', error);
+      }
+    });
   }
 
   trackById(index: number, task: Task): number {
